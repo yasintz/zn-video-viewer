@@ -6,18 +6,7 @@
   "author": "Rob Brennan <rob@therobbrennan.com>",
   "main": "index.js",
   "scripts": {
-    "start": "node .",
-    "deploy": "now && now alias",
-    "docker:info": "docker ps -a",
-    "docker:up": "docker-compose up -d && docker-compose logs -f",
-    "docker:up:clean": "docker-compose up --build -d && docker-compose logs -f",
-    "docker:down": "docker-compose down",
-    "docker:nuke": "npm run docker:nuke:containers && docker rmi -f $(docker images -q)",
-    "docker:nuke:containers": "docker rm $(docker ps -aq)",
-    "docker:refresh": "npm run docker:down && npm run docker:up",
-    "docker:refresh:clean": "npm run docker:down && npm run docker:up:clean",
-    "zeit:deployments:list": "now ls express-zeit-now-v2",
-    "zeit:deployments:purge": "now rm express-zeit-now-v2 --safe --yes"
+    "start": "node index.js"
   },
   "license": "ISC",
   "dependencies": {
