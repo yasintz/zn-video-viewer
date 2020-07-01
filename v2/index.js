@@ -18,29 +18,28 @@ app.listen(port, (err) => {
   console.log(`> Ready on server http://localhost:${port}`);
 });
 
-function getHtmlBuilder() {
-  const templateContent = fs.readFileSync(
-    path.join(__dirname, 'index.hbs'),
-    'utf-8'
-  );
-  const cssContent = fs.readFileSync(
-    path.join(__dirname, 'index.css'),
-    'utf-8'
-  );
-  const socialMediaContent = fs.readFileSync(
-    path.join(__dirname, 'social-media.hbs'),
-    'utf-8'
-  );
+const videoUrlStore = {};
 
-  Handlebars.registerPartial('css', cssContent);
-  Handlebars.registerPartial('socialMedia', socialMediaContent);
-
-  return Handlebars.compile(templateContent);
+function getOrCreateVideoUrl(url) {
+  const storredVideoId = videoUrlStore[url];
+  if (storredVideoId) {
+    return storredVideoId;
+  }
+  const id = ID();
+  videoUrlStore[url] = id;
+  return id;
 }
 
-const template = getHtmlBuilder();
+function getUrlFromVideoId(id, domain) {
+  return domain + '/' + id;
+}
+
+const fileContent = fs.readFileSync(path.join(__dirname, 'index.hbs'), 'utf-8');
+
+const template = Handlebars.compile(fileContent);
 
 app.get('/', (req, res) => {
+  var fullUrl = req.protocol + '://' + req.get('host');
   const videoUrl = req.query.videoUrl;
 
   if (videoUrl && !validURL(videoUrl)) {
@@ -52,7 +51,35 @@ app.get('/', (req, res) => {
     template({
       hasVideoUrl: Boolean(videoUrl),
       videoUrl,
+      saveVideo: fullUrl + '/save-video',
       autoplay: req.query.autoplay !== false,
+      sortUrl: videoUrl
+        ? getUrlFromVideoId(getOrCreateVideoUrl(videoUrl), fullUrl)
+        : undefined,
+    })
+  );
+});
+
+app.get('/:videoId', (req, res) => {
+  var fullUrl = req.protocol + '://' + req.get('host');
+  const findedUrlArray = Object.entries(videoUrlStore).find(
+    ([url, id]) => id === req.params.videoId
+  );
+  if (!findedUrlArray) {
+    res.redirect('/');
+    return;
+  }
+
+  const [videoUrl, id] = findedUrlArray;
+
+  res.send(
+    template({
+      hasVideoUrl: true,
+      videoUrl,
+      saveVideo: fullUrl + '/save-video',
+      isUsedVideoId: true,
+      autoplay: req.query.autoplay !== false,
+      sortUrl: getUrlFromVideoId(id, fullUrl),
     })
   );
 });
