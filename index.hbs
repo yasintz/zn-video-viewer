@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  {{#if hasVideoUrl}}
+  {{else}}
+  <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+  {{/if}}
+  <title>Document</title>
+  <style>
+    body,
+    html {
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      min-height: 100vh;
+      width: 100%;
+    }
+
+    .video-container video {
+      height: 100%;
+      max-height: 80vh;
+    }
+
+    .input-container input {
+      margin-bottom: 25px;
+      line-height: 32px;
+      width: 60%;
+    }
+
+    .input-container button {
+      height: 32px;
+    }
+
+    .resizable-content {
+      height: 100%;
+      width: 100%;
+      background-color: aqua;
+    }
+
+    #app {
+      flex-direction: row;
+      display: flex;
+    }
+
+    .sort-url-wrapper {
+      margin-top: 16px;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="app">
+    {{#if hasVideoUrl}}
+    <div class="container video-container">
+      <video {{#if autoplay}} autoplay {{/if}} controls src="{{videoUrl}}"></video>
+      <div class="sort-url-wrapper">
+        {{#if isUsedVideoId}}
+        <div>
+          {{sortUrl}}
+        </div>
+        {{else}}
+        <a href="{{sortUrl}}">{{sortUrl}}</a>
+        {{/if}}
+      </div>
+    </div>
+
+    {{else}}
+    <div class="container input-container">
+      <input type="text" v-model="videoUrl" />
+      <button :disabled="isButtonDisabled" @click="openVideoUrl">
+        Open video
+      </button>
+    </div>
+    {{/if}}
+  </div>
+  {{#if hasVideoUrl}}
+  {{else}}
+  <script>
+    function validURL(str) {
+      var pattern = new RegExp(
+        '^(https?:\\/\\/)?' + // protocol
+        '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|' + // domain name
+        '((\\d{1,3}\\.){3}\\d{1,3}))' + // OR ip (v4) address
+        '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*' + // port and path
+        '(\\?[;&a-z\\d%_.~+=-]*)?' + // query string
+        '(\\#[-a-z\\d_]*)?$',
+        'i'
+      );
+      return !!pattern.test(str);
+    }
+
+
+    new Vue({
+      el: '#app',
+      data: {
+        videoUrl: ''
+      },
+      computed: {
+        isButtonDisabled() {
+          return !this.videoUrl || !validURL(this.videoUrl);
+        },
+      },
+      methods: {
+        openVideoUrl() {
+          const origin = window.location.origin;
+          window.location.replace(origin + '?videoUrl=' + this.videoUrl);
+        },
+      },
+    });
+  </script>
+  {{/if}}
+</body>
+
+</html>
