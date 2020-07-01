@@ -17,7 +17,6 @@ app.get('/', (req, res) => {
 
 app.get('/get', (req, res, next) => {
   res.json({
-    version: process.env.VERSION,
     yasin: true,
   });
 });
