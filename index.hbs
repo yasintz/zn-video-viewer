@@ -5,13 +5,23 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+
+  <meta property="og:site_name" content={{videoUrl}}>
+  <meta property="og:url" content="https://ysnv.vercel.app/?videoUrl={{videoUrl}}">
+  <meta property="og:type" content="video.other">
+  <meta property="og:video:url" content="{{videoUrl}}">
+  <meta property="og:video:secure_url" content="{{videoUrl}}">
+  <meta property="og:video:type" content="text/html">
+  <meta property="og:video:width" content="1280">
+  <meta property="og:video:height" content="720">
+
   {{#if hasVideoUrl}}
   {{else}}
   <script src="https://cdn.jsdelivr.net/npm/vue"></script>
   {{/if}}
   <title>Yasin Tazeoglu</title>
   <style>
-      {{> css }}
+    {{> css}}
   </style>
 </head>
 
