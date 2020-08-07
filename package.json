@@ -6,7 +6,9 @@
   "author": "Rob Brennan <rob@therobbrennan.com>",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js"
+    "start": "node index.js",
+    "tsc": "echo Yasin",
+    "lint": "node lint.js"
   },
   "license": "ISC",
   "dependencies": {
