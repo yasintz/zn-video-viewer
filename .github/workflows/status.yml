@@ -20,6 +20,6 @@ jobs:
       - name: Install and build
         run: npm install
       - name: Run status checks
-        run: node scripts/github-status-check/index.js
+        run: node scripts/github-status-checks/index.js
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
