@@ -71,3 +71,5 @@ function validURL(str) {
   );
   return !!pattern.test(str);
 }
+
+/* change 1 */
